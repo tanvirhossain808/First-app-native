@@ -5,6 +5,7 @@ import { images } from "../../constants"
 import FormFlied from '@/components/FormFeild/FormFlied'
 import CustomButton from '@/components/CustomButton/CustomButton'
 import { Link } from 'expo-router'
+import { createUser } from "../../lib/appwrite"
 // import { FormEvent } from '@/nativewind-env'
 
 export default function SignUp(): JSX.Element {
@@ -18,7 +19,11 @@ export default function SignUp(): JSX.Element {
         userName: ''
     })
     const [isSubmitting, setIsSubmitting] = useState(false)
-    const submit = (): void => { }
+    const submit = (): void => {
+        createUser()
+
+
+    }
     return (
         <SafeAreaView className='bg-primary h-full'>
             <ScrollView>
