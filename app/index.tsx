@@ -1,7 +1,7 @@
 import { View, Text, ScrollView, Image } from 'react-native'
 import React from 'react'
 import { StatusBar } from 'expo-status-bar';
-import { Link } from 'expo-router';
+import { Redirect, router } from 'expo-router';
 
 import { NativeWindStyleSheet } from "nativewind";
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -14,8 +14,8 @@ NativeWindStyleSheet.setOutput({
 export default function App(): JSX.Element {
     return (
         <SafeAreaView className='bg-primary h-full'>
-            <ScrollView contentContainerStyle={{ height: "100%" }}>
-                <View className='w-full justify-center items-center h-full px-4'>
+            <ScrollView contentContainerStyle={{ height: '100%', }}>
+                <View className='w-full justify-center h-full items-center px-4'>
                     <Image source={images.logo} className='w-[130px] h-[84px]'
                         resizeMode='contain'
                     />
@@ -36,7 +36,7 @@ export default function App(): JSX.Element {
                     <Text className='text-sm font-pregular text-gray-100 mt-7 text-center'>Where creativity meets innovation: embark on a journey of limitless exploration with Aora
 
                     </Text>
-                    <CustomButton title='Continue With Email' handlePress={() => { }}
+                    <CustomButton title='Continue With Email' handlePress={() => { router.push("/signin") }}
                         containerStyle='w-full mt-7'
                     />
                 </View>

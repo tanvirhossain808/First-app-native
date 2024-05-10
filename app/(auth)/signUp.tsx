@@ -1,10 +1,12 @@
 import React from 'react';
+import { Text } from 'react-native';
 
 const SignUp = () => {
     return (
-        <div>
+        <>
+            <Text>This page is for signup</Text>
 
-        </div>
+        </>
     );
 };
 
