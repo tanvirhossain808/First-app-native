@@ -1,10 +1,10 @@
-import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Alert, Image, ScrollView, StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { images } from "../../constants"
 import FormFlied from '@/components/FormFeild/FormFlied'
 import CustomButton from '@/components/CustomButton/CustomButton'
-import { Link } from 'expo-router'
+import { Link, router } from 'expo-router'
 import { createUser } from "../../lib/appwrite"
 // import { FormEvent } from '@/nativewind-env'
 
@@ -19,11 +19,27 @@ export default function SignUp(): JSX.Element {
         userName: ''
     })
     const [isSubmitting, setIsSubmitting] = useState(false)
-    const submit = (): void => {
-        createUser()
+    const submit = async (): Promise<void> => {
+        if (!form.email || !form.userName || !form.password) {
+            Alert.alert("Error", 'Please fill in all the fields')
+        }
+        setIsSubmitting(true)
+        try {
+            const result = await createUser(form.email, form.password, form.userName)
+            console.log("home");
+            router.replace("/home")
+        }
+        catch (error: any) {
+            Alert.alert("error", error.message)
+        }
+        finally {
+            setIsSubmitting(false)
+        }
+
 
 
     }
+    // console.log(form);
     return (
         <SafeAreaView className='bg-primary h-full'>
             <ScrollView>
@@ -38,7 +54,7 @@ export default function SignUp(): JSX.Element {
                         value={form.userName}
                         handleChangeText={
                             (e: string) => setForm({
-                                ...form, email: e
+                                ...form, userName: e
                             })
                         }
                         placeholder='Type your username'
