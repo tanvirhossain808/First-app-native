@@ -7,11 +7,16 @@ import { NativeWindStyleSheet } from "nativewind";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from "../constants"
 import CustomButton from '@/components/CustomButton/CustomButton';
+import { useGlobalContext } from '@/context/GlobalProvider';
 
 NativeWindStyleSheet.setOutput({
     default: "native",
 });
 export default function App(): JSX.Element {
+    const { isLoading, isLoggedIn }: { isLoading: boolean, isLoggedIn: boolean } = useGlobalContext()
+
+    console.log(isLoggedIn);
+    if (!isLoading && isLoggedIn) return <Redirect href="/home" />
     return (
         <SafeAreaView className='bg-primary h-full'>
             <ScrollView contentContainerStyle={{ height: '100%', }}>

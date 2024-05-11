@@ -6,7 +6,6 @@ import { ImageSourcePropType } from 'react-native';
 const TabIcon = ({ icon, color, name, focused }: {
     icon: ImageSourcePropType, color: string, name: string, focused: boolean
 }): JSX.Element => {
-    console.log(focused);
     return (
         <View className='items-center justify-center gap-2'>
             <Image source={icon}

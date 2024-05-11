@@ -22,11 +22,12 @@ export default function SignUp(): JSX.Element {
     const submit = async (): Promise<void> => {
         if (!form.email || !form.userName || !form.password) {
             Alert.alert("Error", 'Please fill in all the fields')
+            return
+
         }
         setIsSubmitting(true)
         try {
             const result = await createUser(form.email, form.password, form.userName)
-            console.log("home");
             router.replace("/home")
         }
         catch (error: any) {

@@ -10,7 +10,7 @@ export const appWriteConfig = {
     storageId: "663e77490016d6ea3f73"
 }
 // import SignIn from '@/app/(auth)/signin';
-import { Account, Client, ID, Avatars, Databases } from 'react-native-appwrite';
+import { Account, Client, ID, Avatars, Databases, Query } from 'react-native-appwrite';
 // Init your React Native SDK
 
 client
@@ -65,12 +65,31 @@ export const createUser = async (email: string, password: string, userName: stri
 
 export async function signIn(email: string, password: string) {
     try {
-        const session = await account.createEmailsSession(email, password)
+        const session = await account.createEmailPasswordSession(email, password)
         return session
     }
 
     catch (error) {
-
+        console.log(error);
     }
 
+}
+
+export const getCurrentUser = async () => {
+    try {
+        const currentAccount = await account.get()
+        if (!currentAccount) throw Error
+
+        const currentUser = await databases.listDocuments(
+            appWriteConfig.databaseId,
+            appWriteConfig.userCollectionId,
+            [Query.equal("accountId", currentAccount.$id)]
+        )
+
+        if (!currentUser) throw Error
+        return currentUser.documents[0]
+
+    } catch (error) {
+        console.log(error)
+    }
 }
