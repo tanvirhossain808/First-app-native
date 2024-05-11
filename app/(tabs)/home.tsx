@@ -1,20 +1,26 @@
-import { View, Text, FlatList, Image } from 'react-native'
-import React from 'react'
+import { View, Text, FlatList, Image, RefreshControl } from 'react-native'
+import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { images } from '@/constants';
 import SearchInput from '@/components/SearchInput/SearchInput';
 import Trending from '@/components/Trending/Trending';
+import EmptyState from '@/components/EmptyState/EmptyState';
 
 const Home = (): JSX.Element => {
-    interface dataType {
 
-    }
     interface ListItem {
         $id: string; // Assuming $id is a string
         // Other properties of your list item
     }
+    const [refreshing, setRefreshing] = useState<boolean>(false)
+    const onRefresh = () => {
+        setRefreshing(true)
+
+
+        setRefreshing(false)
+    }
     return (
-        <SafeAreaView className='bg-primary'>
+        <SafeAreaView className='bg-primary flex-1'>
             <FlatList data={[{ id: "1" }]}
                 keyExtractor={(item: { id: string }) => item.id}
                 renderItem={({ item }) => (
@@ -45,13 +51,14 @@ const Home = (): JSX.Element => {
                         </View>
                     </View>
                 )}
+                ListEmptyComponent={() => <EmptyState title={"No video found"}
+                    subtitle="Be the first one to upload a video"
+                />}
 
+                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+            />
 
-            >
-
-
-
-            </FlatList>
+            {/* </FlatList> */}
         </SafeAreaView>
     )
 }
