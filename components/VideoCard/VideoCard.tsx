@@ -2,7 +2,7 @@ import { icons } from '@/constants'
 import { useState } from 'react'
 import { View, Text, Image, TouchableOpacity } from 'react-native'
 
-const VideoCard = ({ video: { title, thumbnail, video, creator: { username, avatar } } }) => {
+const VideoCard = ({ video: { title, thumbnail, video, creator: { username, avatar } } }: { video: any }) => {
     const [play, setPlay] = useState(false)
     return (
         <View className='flex-col items-center px-4 mb-14'>

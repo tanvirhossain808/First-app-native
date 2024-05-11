@@ -5,14 +5,19 @@ import { images } from '@/constants';
 import SearchInput from '@/components/SearchInput/SearchInput';
 import Trending from '@/components/Trending/Trending';
 import EmptyState from '@/components/EmptyState/EmptyState';
-import { getAllPosts } from '@/lib/appwrite';
+import { getAllPosts, getLatestPosts } from '@/lib/appwrite';
 import useAppWrite from '@/lib/hooks/useAppWrite';
 import VideoCard from '@/components/VideoCard/VideoCard';
+
+
+
 
 const Home = (): JSX.Element => {
 
     const { data: posts, refetch } = useAppWrite(getAllPosts)
-    console.log(posts, "post");
+    const { data: latestPost } = useAppWrite(getLatestPosts)
+    console.log(latestPost, "post");
+    // console.log(posts, "post");
     const [refreshing, setRefreshing] = useState<boolean>(false)
     const onRefresh = async () => {
         setRefreshing(true)
@@ -23,7 +28,9 @@ const Home = (): JSX.Element => {
     return (
         <SafeAreaView className='bg-primary flex-1'>
             <FlatList data={posts}
-                keyExtractor={(item: { id: string }) => item.id}
+                keyExtractor={(item: {
+                    $id: string; id: string
+                }) => item.$id}
                 renderItem={({ item }) => (<VideoCard video={item} />
                 )}
                 ListHeaderComponent={() => (
@@ -47,7 +54,7 @@ const Home = (): JSX.Element => {
                             <Text className='text-gray-100 text-lg font-pregular mb-3'>
                                 Latest Videos
                             </Text>
-                            <Trending posts={[{ id: 1 }, { id: 2 }, { id: 3 }] ?? []} />
+                            <Trending posts={latestPost} />
                         </View>
                     </View>
                 )}
