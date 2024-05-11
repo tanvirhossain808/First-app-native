@@ -128,3 +128,19 @@ export const getLatestPosts = async () => {
         throw new Error(error)
     }
 }
+export const searchPosts = async (query) => {
+    try {
+        const currentAccount = await account.get()
+        console.log(currentAccount, "currentAccount");
+        const posts = await databases.listDocuments(
+            appWriteConfig.databaseId,
+            appWriteConfig.videoCollectionId,
+            [Query.search("title", query)]
+        )
+        return posts.documents
+    }
+    catch (error) {
+        console.log(error);
+        throw new Error(error)
+    }
+}
