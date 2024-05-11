@@ -5,26 +5,26 @@ import { images } from '@/constants';
 import SearchInput from '@/components/SearchInput/SearchInput';
 import Trending from '@/components/Trending/Trending';
 import EmptyState from '@/components/EmptyState/EmptyState';
+import { getAllPosts } from '@/lib/appwrite';
+import useAppWrite from '@/lib/hooks/useAppWrite';
+import VideoCard from '@/components/VideoCard/VideoCard';
 
 const Home = (): JSX.Element => {
 
-    interface ListItem {
-        $id: string; // Assuming $id is a string
-        // Other properties of your list item
-    }
+    const { data: posts, refetch } = useAppWrite(getAllPosts)
+    console.log(posts, "post");
     const [refreshing, setRefreshing] = useState<boolean>(false)
-    const onRefresh = () => {
+    const onRefresh = async () => {
         setRefreshing(true)
-
+        await refetch()
 
         setRefreshing(false)
     }
     return (
         <SafeAreaView className='bg-primary flex-1'>
-            <FlatList data={[{ id: "1" }]}
+            <FlatList data={posts}
                 keyExtractor={(item: { id: string }) => item.id}
-                renderItem={({ item }) => (
-                    <Text className='text-3xl'>{item.id}</Text>
+                renderItem={({ item }) => (<VideoCard video={item} />
                 )}
                 ListHeaderComponent={() => (
                     <View className='mt-6 px-4 space-y-6'>

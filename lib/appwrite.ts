@@ -6,7 +6,8 @@ export const appWriteConfig = {
     projectId: "663e717600367b939b65",
     databaseId: "663e74040037037fec15",
     userCollectionId: "663e7456000fec35c172",
-    videoCollectionId: "663e74040037037fec15",
+    // videoCollectionId: "663e74040037037fec15",
+    videoCollectionId: "663e7487002d6b17470a",
     storageId: "663e77490016d6ea3f73"
 }
 // import SignIn from '@/app/(auth)/signin';
@@ -92,4 +93,23 @@ export const getCurrentUser = async () => {
     } catch (error) {
         console.log(error)
     }
+}
+
+export const getAllPosts = async () => {
+    try {
+        const currentAccount = await account.get()
+        console.log(currentAccount, "currentAccount");
+        const posts = await databases.listDocuments(
+            appWriteConfig.databaseId,
+            appWriteConfig.videoCollectionId
+        )
+        return posts.documents
+    }
+    catch (error) {
+        console.log(error);
+        throw new Error(error)
+    }
+
+
+
 }
