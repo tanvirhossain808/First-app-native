@@ -1,7 +1,8 @@
 import { View, Text, FlatList, TouchableOpacity, ImageBackground, Image } from 'react-native'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import * as Animatable from "react-native-animatable"
 import { icons } from '@/constants'
+import { Video, ResizeMode } from 'expo-av'
 
 
 
@@ -31,7 +32,19 @@ const TrendingItem = ({ activeItem, item }) => {
             animation={activeItem === item.$id ? zoomIn : zoomOut}
             duration={500}
         >
-            {play ? <Text className='text-white'>Play</Text> : <TouchableOpacity
+            {play ? <Video source={{ uri: item.video }}
+                className='w-52 h-72 rounded-[35px] mt-3 bg-white/10'
+                resizeMode={ResizeMode.CONTAIN}
+                useNativeControls
+                shouldPlay
+                onPlaybackStatusUpdate={(status) => {
+                    console.log(status, "status");
+                    if (status.didJustFinished) {
+                        setPlay(false)
+                    }
+                }}
+
+            /> : <TouchableOpacity
                 className='relative justify-center items-center'
                 activeOpacity={0.5}
                 onPress={() => setPlay(true)}
@@ -52,12 +65,13 @@ const TrendingItem = ({ activeItem, item }) => {
 
 
 const Trending = ({ posts }) => {
-    const [activeItem, setActiveItem] = useState(posts[1])
-    const viewableItemsChanged = ({ viewableItems }) => {
+    const handleViewableItemsChanged = useRef(({ viewableItems, changed }) => {
         if (viewableItems.length > 0) {
             setActiveItem(viewableItems[0].key)
         }
-    }
+    });
+    const [activeItem, setActiveItem] = useState(posts[1])
+
     return (
         <FlatList data={posts}
             keyExtractor={(item) => item.$id}
@@ -67,7 +81,7 @@ const Trending = ({ posts }) => {
                     item={item}
                 />)}
             horizontal
-            onViewableItemsChanged={viewableItemsChanged}
+            onViewableItemsChanged={handleViewableItemsChanged.current}
             viewabilityConfig={
                 {
                     itemVisiblePercentThreshold: 70
@@ -75,6 +89,7 @@ const Trending = ({ posts }) => {
             }
             contentOffset={{
                 x: 170
+
             }}
 
         />
