@@ -19,7 +19,6 @@ const Search = (): JSX.Element => {
     useEffect(() => {
         refetch()
     }, [query])
-    // console.log(posts, "post");
 
     return (
         <SafeAreaView className='bg-primary flex-1'>

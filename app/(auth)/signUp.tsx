@@ -44,7 +44,6 @@ export default function SignUp(): JSX.Element {
 
 
     }
-    // console.log(form);
     return (
         <SafeAreaView className='bg-primary h-full'>
             <ScrollView>

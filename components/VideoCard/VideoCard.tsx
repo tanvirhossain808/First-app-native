@@ -40,7 +40,6 @@ const VideoCard = ({ video: { title, thumbnail, video, creator: { username, avat
                 useNativeControls
                 shouldPlay
                 onPlaybackStatusUpdate={(status) => {
-                    console.log(status, "status");
                     if (status.didJustFinished) {
                         setPlay(false)
                     }

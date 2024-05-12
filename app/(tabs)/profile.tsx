@@ -15,8 +15,6 @@ import InfoBox from '@/components/InfoBox/InfoBox';
 
 const Profile = (): JSX.Element => {
     const { user, setUser, isLoggedIn, setIsLoading } = useGlobalContext()
-    console.log(user, "user");
-
     const { data: posts, refetch } = useAppWrite(() => getUserPosts(user?.$id))
 
 
@@ -26,7 +24,6 @@ const Profile = (): JSX.Element => {
         setIsLoading(false)
         router.replace("/signin")
     }
-    // console.log(posts, "post");
     return (
         <SafeAreaView className='bg-primary flex-1'>
             <FlatList data={posts}

@@ -1,3 +1,4 @@
+import { Account, Client, Storage, ID, Avatars, Databases, Query } from 'react-native-appwrite';
 const client = new Client();
 
 export const appWriteConfig = {
@@ -11,7 +12,7 @@ export const appWriteConfig = {
     storageId: "663e77490016d6ea3f73"
 }
 // import SignIn from '@/app/(auth)/signin';
-import { Account, Client, ID, Avatars, Databases, Query } from 'react-native-appwrite';
+
 // Init your React Native SDK
 
 client
@@ -24,6 +25,7 @@ client
 const account = new Account(client);
 const avatars = new Avatars(client);
 const databases = new Databases(client)
+const storage = new Storage(client)
 export const createUser = async (email: string, password: string, userName: string): Promise<void> => {
     // Register User
     /*   account.create(ID.unique(), 'me@example.com', 'password', 'Jane Doe')
@@ -98,10 +100,10 @@ export const getCurrentUser = async () => {
 export const getAllPosts = async () => {
     try {
         const currentAccount = await account.get()
-        console.log(currentAccount, "currentAccount");
         const posts = await databases.listDocuments(
             appWriteConfig.databaseId,
-            appWriteConfig.videoCollectionId
+            appWriteConfig.videoCollectionId,
+            [Query.orderDesc("$createdAt")]
         )
         return posts.documents
     }
@@ -115,7 +117,6 @@ export const getAllPosts = async () => {
 export const getLatestPosts = async () => {
     try {
         const currentAccount = await account.get()
-        console.log(currentAccount, "currentAccount");
         const posts = await databases.listDocuments(
             appWriteConfig.databaseId,
             appWriteConfig.videoCollectionId,
@@ -147,7 +148,7 @@ export const searchPosts = async (query) => {
 export const getUserPosts = async (userId) => {
     try {
         const currentAccount = await account.get()
-        console.log(currentAccount, "currentAccount");
+        // console.log(currentAccount, "currentAccount");
         const posts = await databases.listDocuments(
             appWriteConfig.databaseId,
             appWriteConfig.videoCollectionId,
@@ -175,4 +176,91 @@ export const signOut = async () => {
 
 
 
+}
+export const getFilePreview = async (fileId, type) => {
+    let fileUrl
+    // console.log(fileUrl, "hey");
+    try {
+        if (type === "video") {
+            fileUrl = storage.getFileView(appWriteConfig.storageId, fileId)
+        }
+        else if (type === "image") {
+            fileUrl = storage.getFilePreview(appWriteConfig.storageId, fileId,
+                2000, 2000, "top", 100
+            )
+        }
+        else {
+            throw new Error("Invalid file type")
+        }
+        if (!fileUrl) throw Error
+        console.log(fileUrl, "fireurl");
+        return fileUrl
+
+    } catch (error) {
+
+        console.log(error);
+        throw new Error(error)
+    }
+
+
+}
+
+export const uploadFile = async (file, type) => {
+
+    if (!file) return;
+
+    const asset = {
+
+        name: file.name,
+        type: file.mimeType,
+        size: file.size,
+        uri: file.uri,
+    }
+
+    try {
+        const uploadFile = await storage.createFile(
+            appWriteConfig.storageId,
+            ID.unique(),
+            asset
+        )
+        const fileUrl = await getFilePreview(uploadFile.$id, type)
+        // console.log("before return");
+        return fileUrl
+    } catch (error) {
+        console.log(error);
+        throw new Error(error)
+    }
+
+
+}
+
+export const createVideo = async (form) => {
+    console.log(form.thumbnailUrl);
+    try {
+        const [thumbnailUrl, videoUrl, ...rest] = await Promise.all([
+            uploadFile(form.thumbnail, "image"),
+            uploadFile(form.video, "video")
+        ])
+        console.log(rest, "thumbnail");
+        console.log(videoUrl, "videoUrl");
+        const newPost = await databases.createDocument(
+            appWriteConfig.databaseId,
+            appWriteConfig.videoCollectionId,
+            ID.unique(),
+            {
+                title: form.title,
+                thumbnail: thumbnailUrl,
+                video: videoUrl,
+                prompt: form.prompt,
+                creator: form.userId
+            }
+        )
+        console.log(newPost, "newPost");
+        return newPost
+
+
+    } catch (error) {
+        // console.log(error);
+
+    }
 }

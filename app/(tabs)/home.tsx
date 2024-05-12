@@ -20,8 +20,6 @@ const Home = (): JSX.Element => {
 
     const { data: posts, refetch } = useAppWrite(getAllPosts)
     const { data: latestPost } = useAppWrite(getLatestPosts)
-    console.log(latestPost, "post");
-    // console.log(posts, "post");
     const [refreshing, setRefreshing] = useState<boolean>(false)
     const onRefresh = async () => {
         setRefreshing(true)
@@ -29,6 +27,7 @@ const Home = (): JSX.Element => {
 
         setRefreshing(false)
     }
+    // console.log(posts);
     return (
         <SafeAreaView className='bg-primary flex-1'>
             <FlatList data={posts}

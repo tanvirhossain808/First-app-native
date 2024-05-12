@@ -10,7 +10,6 @@ const SearchInput = ({ initailQuery }): JSX.Element => {
     const [showPassword, setShowPassword] = useState(false)
     const pathName = usePathname()
     const [query, setQuery] = useState(initailQuery || "")
-    console.log(query);
     return (
         <View className='border-2 border-black-200 w-full h-16 px-4 rounded-2xl focus:border-secondary items-center flex-row '>
             <TextInput className='text-base mt-0.5 text-white flex-1 font-pregular'
