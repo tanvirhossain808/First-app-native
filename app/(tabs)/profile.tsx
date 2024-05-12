@@ -2,10 +2,10 @@ import { View, Text, FlatList, TouchableOpacity, Image } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import SearchInput from '@/components/SearchInput/SearchInput';
 import EmptyState from '@/components/EmptyState/EmptyState';
-import { getUserPosts } from '@/lib/appwrite';
+import { getUserPosts, signOut } from '@/lib/appwrite';
 import useAppWrite from '@/lib/hooks/useAppWrite';
 import VideoCard from '@/components/VideoCard/VideoCard';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { useGlobalContext } from '@/context/GlobalProvider';
 import { icons } from '@/constants';
 import InfoBox from '@/components/InfoBox/InfoBox';
@@ -14,14 +14,17 @@ import InfoBox from '@/components/InfoBox/InfoBox';
 
 
 const Profile = (): JSX.Element => {
-    const { user, setUser, isLoggedIn } = useGlobalContext()
+    const { user, setUser, isLoggedIn, setIsLoading } = useGlobalContext()
     console.log(user, "user");
 
     const { data: posts, refetch } = useAppWrite(() => getUserPosts(user?.$id))
 
 
-    const logout = () => {
-
+    const logout = async () => {
+        await signOut()
+        setUser(null)
+        setIsLoading(false)
+        router.replace("/signin")
     }
     // console.log(posts, "post");
     return (
