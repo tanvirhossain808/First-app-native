@@ -144,3 +144,21 @@ export const searchPosts = async (query) => {
         throw new Error(error)
     }
 }
+export const getUserPosts = async (userId) => {
+    try {
+        const currentAccount = await account.get()
+        console.log(currentAccount, "currentAccount");
+        const posts = await databases.listDocuments(
+            appWriteConfig.databaseId,
+            appWriteConfig.videoCollectionId,
+            [Query.equal("creator", userId)]
+
+        )
+        console.log('hey');
+        return posts.documents
+    }
+    catch (error) {
+        console.log(error);
+        throw new Error(error)
+    }
+}

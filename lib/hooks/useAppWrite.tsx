@@ -13,6 +13,7 @@ const useAppWrite = (fn) => {
 
         } catch (error) {
             Alert.alert("Error", error);
+            console.log(error);
         }
         finally {
             setIsLoading(false)

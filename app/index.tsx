@@ -13,9 +13,9 @@ NativeWindStyleSheet.setOutput({
     default: "native",
 });
 export default function App(): JSX.Element {
-    const { isLoading, isLoggedIn }: { isLoading: boolean, isLoggedIn: boolean } = useGlobalContext()
+    const { isLoading, isLoggedIn, user }: { isLoading: boolean, isLoggedIn: boolean, user: any } = useGlobalContext()
 
-    console.log(isLoggedIn);
+    console.log(user, "user");
     if (!isLoading && isLoggedIn) return <Redirect href="/home" />
     return (
         <SafeAreaView className='bg-primary h-full'>

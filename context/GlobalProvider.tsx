@@ -20,7 +20,7 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
     const [user, setUser] = useState<null | any>(null)
     const [isLoading, setIsLoading] = useState<boolean>(true)
-    console.log(user);
+    // console.log(user);
     useEffect(() => {
         getCurrentUser()
             .then((res) => {
